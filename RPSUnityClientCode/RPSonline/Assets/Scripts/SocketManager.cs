@@ -62,6 +62,24 @@ public class SocketManager : MonoBehaviour
             return false;
         }
     }
+    public bool IsLobbyExistent(string _lobbyID){
+        int temp = 0;
+        for (int i = 0; i < lastestGameState.players.Length; i++)
+        {
+            if(_lobbyID == lastestGameState.players[i].lobbyID){
+                temp ++;
+            }
+        }
+        if(temp == 0){ //none existent host
+            return false;
+        }else if(temp < 2){
+           return false;
+        }else if(temp == 2){
+            return true;
+        }else{
+            return false;
+        }
+    }
      public int IsGameOver(string _lobbyID, string _myID){
         int temp = 0;
         int _opID = 0;

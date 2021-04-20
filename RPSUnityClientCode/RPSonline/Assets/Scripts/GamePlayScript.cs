@@ -19,6 +19,7 @@ public class GamePlayScript : MonoBehaviour
 
     [SerializeField] GameObject hostConnectPanel;
     [SerializeField] GameObject startPanel;
+    [SerializeField] GameObject dcText;
 
     SocketManager socketManager;
 
@@ -33,7 +34,7 @@ public class GamePlayScript : MonoBehaviour
     private bool isItActive = false;
     private String lobbyString = "null";
 
-    private bool inLobby, startGame, startedGame, isGameComplete = false;
+    private bool inLobby, startGame, startedGame, isGameComplete, restartGame = false;
     private int winner = 0;
     private string MyUserID = "null";
 
@@ -67,7 +68,9 @@ public class GamePlayScript : MonoBehaviour
             Debug.Log("Waiting for lobby to be ready " + startGame);
         }
         if(startGame){
+            
             if(startedGame == false){
+                restartGame = false;
                 Debug.Log("Make panel visable");
                 newString = "Rock, Paper, or Scissors?";
                 newOutput = "";
@@ -126,7 +129,10 @@ public class GamePlayScript : MonoBehaviour
             isStartPanelVisable = startPanelVisable;
             startPanel.SetActive(isStartPanelVisable);
         }
-        if(startGame){
+        if(startGame || restartGame){
+            if(socketManager.IsLobbyExistent(lobbyString) == false){
+                PlayerDisconnected("null");
+            }
             scoreText.text = "You |  "+myScore.ToString()+" - "+enemyScore.ToString()+"  | Opponent";
         }else{
             scoreText.text = "";
@@ -171,6 +177,7 @@ public class GamePlayScript : MonoBehaviour
         startGame = false;
         newString = "Restarting..";
         changeImage = false;
+        restartGame = true;
         
     }
     bool HostControlPanelVisable = true;
@@ -186,6 +193,7 @@ public class GamePlayScript : MonoBehaviour
     public void PlayerDisconnected(string _droppedID){
         if(_droppedID != "null"){
             socketManager.SendDCToServer();
+            dcText.SetActive(true);
             
             newString = "Player dced..";
         }else{
@@ -193,6 +201,7 @@ public class GamePlayScript : MonoBehaviour
             Debug.Log("make start button appear");
             
             newString = "You dced..";
+            
 
 
         }
@@ -213,6 +222,7 @@ public class GamePlayScript : MonoBehaviour
         inLobby = false;
         keyText.text = "";
         changeImage = false;
+        restartGame = false;
     }
     [SerializeField] Sprite[] rpsImages;
     [SerializeField] Image playerImage;
