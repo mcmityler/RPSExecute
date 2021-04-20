@@ -112,25 +112,6 @@ def handle_messages(sock: socket.socket):
 
         clients_lock.release()
         
-        
-                
-
-
-def sendGameRulesToClient(sock: socket.socket, addr):
-    #send a json to client.
-    payload = {} #dictionary
-    payload['header'] = SocketMessageType.GAMERULES #fill in header
-    payload = json.dumps(payload).encode('utf-8') #convert obj to json formatted string.
-    sock.sendto(bytes(payload), (addr[0], addr[1]))
-
-def sendGameFullMessage(sock: socket.socket, addr):
-    #send a json to client.
-    payload = {} #dictionary
-    payload['header'] = SocketMessageType.GAMEFULL #fill in header
-    #payload['guessOptions'] = to_guess_options #add gameoptions.
-
-    payload = json.dumps(payload).encode('utf-8') #convert obj to json formatted string.
-    sock.sendto(bytes(payload), (addr[0], addr[1]))
 
 def SendDisconnectMessage(sock: socket.socket, dropped ,addr):
     #send a json to client.
