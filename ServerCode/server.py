@@ -155,7 +155,7 @@ def main():
     #start new thread for listening to messages
     _thread.start_new_thread(gameLoop, (s,))
     _thread.start_new_thread(handle_messages, (s,))
-    #_thread.start_new_thread(cleanClients,(s, ))
+    _thread.start_new_thread(cleanClients,(s, ))
 
     while True:
         time.sleep(1)
