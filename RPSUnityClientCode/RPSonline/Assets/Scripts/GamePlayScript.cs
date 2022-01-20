@@ -163,6 +163,9 @@ public class GamePlayScript : MonoBehaviour
         newString = "Game is full";
          newOutput = "Game is full";
     }
+    public void OutPutMessage(string _text){
+        newOutput = _text;
+    }
     public void KeyMessage(string _text){
         keyText.text = _text;
     }

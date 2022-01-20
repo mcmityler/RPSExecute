@@ -12,7 +12,7 @@ public class SocketManager : MonoBehaviour
 {
 
     public UdpClient udp; //new udp
-    public const string IP_ADRESS = "3.224.107.80"; //the ip the server is connected to..
+    public const string IP_ADRESS = "54.205.115.9"; //the ip the server is connected to..
     public const int PORT = 12345; //port we are using
 
     GamePlayScript gamePlayScript;
@@ -174,11 +174,14 @@ public class SocketManager : MonoBehaviour
 
     }
     public void StartButton(){
+        
         udp = new UdpClient(); //create new client
         try{
             udp.Connect(IP_ADRESS, PORT); //try to connect to server
+            Debug.Log ("Connected");
         }catch(Exception e){
             Debug.LogError(e);
+          
         }
         SendConnectMessage(); //send a connect message to server (also add player to a connect list).
         udp.BeginReceive(new AsyncCallback(OnRecieved), udp);        //wait for server messages...
@@ -195,7 +198,7 @@ public class SocketManager : MonoBehaviour
         UdpClient socket = result.AsyncState as UdpClient;
 
         //new source obj
-        IPEndPoint source = new IPEndPoint(0, 0 );
+        IPEndPoint source = new IPEndPoint(IPAddress.Any, 0 );
         //get data that was passed // source passed by memory not value
         byte[] message = socket.EndReceive(result, ref source);
 
@@ -212,6 +215,7 @@ public class SocketManager : MonoBehaviour
     
     
     void SendConnectMessage(){ //tell server you have connected.. send connect message
+        Debug.Log ("sending connect message");
         var payload = new ConnectClientMassage{ //payload is what you are sending to server.
             header = socketMessagetype.CONNECT, //header tells server what type of message it is.
             lobbyID = lobbyString
@@ -289,6 +293,7 @@ public class SocketManager : MonoBehaviour
 
     }
     void HeartBeatMessageToServer(){
+        Debug.Log("heartbeat");
         var payload = new HeartBeatMessage{
             header = socketMessagetype.HEARTBEAT,
         };

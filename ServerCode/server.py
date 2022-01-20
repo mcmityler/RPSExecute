@@ -32,7 +32,7 @@ class SocketMessageType(IntEnum):
 def cleanClients(sock): #check if there are any clients to disconnect
    while True:
       for c in list(clients.keys()):
-         if (datetime.now() - clients[c]['lastBeat']).total_seconds() > 5:
+         if (datetime.now() - clients[c]['lastBeat']).total_seconds() > 15: # how long should you wait between heartbeats before you drop the client
             for q in list(clients.keys()):
                 if (clients[c]['lobbyID'] == clients[q]['lobbyID'] and c != q):
                     SendDisconnectMessage(sock, c, q)
@@ -71,7 +71,7 @@ def handle_messages(sock: socket.socket):
         data = json.loads(data)
 
         #print(f'Recieved message from {addr}: {data}')
-
+        
         #payload = "guess recieved"
         #payload = bytes(payload.encode("utf-8"))
         clients_lock.acquire()
